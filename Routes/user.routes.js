@@ -31,12 +31,13 @@ router.get('/:id', getUserById)
 router.post('/', createUser)
 
 // PUT  /api/users/:id
-// Actualiza los datos (name, email) de un usuario existente, identificado por su _id de MongoDB
-// Ejemplo: PUT /api/users/664abc123...  →  actualiza ese usuario
+// Actualiza los datos (name, email) de un usuario existente, identificado por su id numérico
+// Ejemplo: PUT /api/users/3  →  actualiza el usuario con id = 3
 router.put('/:id', updateUser)
 
 // DELETE  /api/users/:id
-// Elimina permanentemente un usuario identificado por su _id de MongoDB
+// Elimina permanentemente un usuario identificado por su id numérico
+// Ejemplo: DELETE /api/users/3  →  elimina el usuario con id = 3
 router.delete('/:id', deleteUser)
 
 module.exports = router;

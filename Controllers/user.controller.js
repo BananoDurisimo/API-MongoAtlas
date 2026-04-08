@@ -61,17 +61,16 @@ const createUser = async (req, res) => {
 }
 
 // ── Actualizar un usuario ─────────────────────────────────────────────────────
-// Modifica el name y/o email de un usuario existente. Se identifica por su _id de MongoDB.
+// Modifica el name y/o email de un usuario existente. Se identifica por su id numérico.
 const updateUser = async (req, res) => {
-    // El id que llega por la URL aquí es el _id de MongoDB (no el id numérico nuestro)
     const { id } = req.params;
     const { name, email } = req.body; // Los nuevos valores que queremos guardar
     try {
-        const updatedUser = await User.findByIdAndUpdate(
-            id,             // Busca el documento con este _id
-            { name, email },// Lo actualiza con estos nuevos valores
-            { new: true }   // Sin esta opción, mongoose devolvería los datos ANTES del cambio;
-                            // con { new: true } devuelve los datos YA actualizados
+        const updatedUser = await User.findOneAndUpdate(
+            { id: Number(id) }, // Busca por el campo id numérico que nosotros definimos
+            { name, email },    // Lo actualiza con estos nuevos valores
+            { new: true }       // Sin esta opción, mongoose devolvería los datos ANTES del cambio;
+                                // con { new: true } devuelve los datos YA actualizados
         )
 
         if (!updatedUser) {
@@ -84,12 +83,12 @@ const updateUser = async (req, res) => {
 }
 
 // ── Eliminar un usuario ───────────────────────────────────────────────────────
-// Borra permanentemente un usuario de la base de datos. Se identifica por su _id de MongoDB.
+// Borra permanentemente un usuario de la base de datos. Se identifica por su id numérico.
 const deleteUser = async (req, res) => {
     const { id } = req.params
     try {
-        // findByIdAndDelete busca el documento por su _id y lo elimina en una sola operación
-        const deletedUser = await User.findByIdAndDelete(id);
+        // findOneAndDelete busca el documento por nuestro campo id numérico y lo elimina
+        const deletedUser = await User.findOneAndDelete({ id: Number(id) });
 
         if (!deletedUser) {
             return res.status(404).json({ message: 'Usuario no encontrado' })
